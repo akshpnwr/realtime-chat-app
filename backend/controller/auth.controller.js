@@ -1,28 +1,25 @@
+import expressAsyncHandler from "express-async-handler";
 import User from "../model/user.model.js";
 import { StatusCodes } from "http-status-codes";
 
 export const login = async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        const user = await User.findOne({ username })
+    const { username, password } = req.body;
+    const user = await User.findOne({ username })
 
-        if (!user) return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
+    if (!user) return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
 
-        const isPasswordCorrect = await user.comparePassword(password)
+    const isPasswordCorrect = await user.comparePassword(password)
 
-        if (!isPasswordCorrect) res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid credentials' });
+    if (!isPasswordCorrect) res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid credentials' });
 
-        user.createJWT(res)
+    user.createJWT(res)
 
-        res.status(StatusCodes.OK).json({
-            _id: newUser._id,
-            fullname: newUser.fullname,
-            username: newUser.username,
-            profilePic: newUser.profilePic,
-        })
-    } catch (error) {
-        console.log(`Error in login controller: ${error}`);
-    }
+    res.status(StatusCodes.OK).json({
+        _id: newUser._id,
+        fullname: newUser.fullname,
+        username: newUser.username,
+        profilePic: newUser.profilePic,
+    })
 }
 
 export const signup = async (req, res) => {
