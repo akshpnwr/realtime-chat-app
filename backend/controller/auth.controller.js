@@ -1,4 +1,3 @@
-import expressAsyncHandler from "express-async-handler";
 import User from "../model/user.model.js";
 import { StatusCodes } from "http-status-codes";
 
@@ -15,10 +14,10 @@ export const login = async (req, res) => {
     user.createJWT(res)
 
     res.status(StatusCodes.OK).json({
-        _id: newUser._id,
-        fullname: newUser.fullname,
-        username: newUser.username,
-        profilePic: newUser.profilePic,
+        _id: user._id,
+        fullname: user.fullname,
+        username: user.username,
+        profilePic: user.profilePic,
     })
 }
 
@@ -44,7 +43,6 @@ export const signup = async (req, res) => {
         })
 
         if (newUser) {
-
             await newUser.save()
             newUser.createJWT(res)
 
@@ -56,7 +54,7 @@ export const signup = async (req, res) => {
             });
         }
         else {
-            res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid user data' });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid user data' });
         }
     } catch (error) {
         console.log(`Error in signup controller: ${error}`);
