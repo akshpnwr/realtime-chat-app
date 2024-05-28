@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import useConversationContext from "../context/ConversationContext";
 
-const useConversation = () => {
+const useGetConversations = () => {
     const [loading, setLoading] = useState(false);
-    const { setConversations } = useConversationContext();
+    const [conversations, setConversations] = useState([]);
 
     useEffect(() => {
         const getUsers = async () => {
@@ -23,7 +22,7 @@ const useConversation = () => {
         }
         getUsers();
     }, []);
-    return { loading };
+    return { loading, conversations };
 }
 
-export default useConversation;
+export default useGetConversations;

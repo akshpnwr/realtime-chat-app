@@ -1,18 +1,23 @@
-import { useEffect } from "react";
-import useConversationContext from "../../context/ConversationContext";
-import useConversation from "../../hooks/useConversation";
+import useGetConversation from "../../hooks/useGetConversations";
+import { getRandomEmoji } from "../../utils/emojis";
 import Conversation from "./Conversation";
 
 const Conversations = () => {
-  const { loading } = useConversation();
-  const { conversations } = useConversationContext();
-
+  const { loading, conversations } = useGetConversation();
   return (
     <div className="py-2 flex flex-col overflow-auto">
-      {loading && <p>Loading...</p>}
-      {conversations.map((conversation) => (
-        <Conversation key={conversation._id} {...conversation} />
+      {conversations.map((conversation, idx) => (
+        <Conversation
+          key={conversation._id}
+          conversation={conversation}
+          emoji={getRandomEmoji()}
+          {...conversation}
+          lastIdx={idx === conversations.length - 1}
+        />
       ))}
+      {loading ? (
+        <span className="loading loading-spinner mx-auto"></span>
+      ) : null}
     </div>
   );
 };
