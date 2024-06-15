@@ -9,8 +9,7 @@ import userRoutes from './router/user.routes.js'
 import connectDB from './db/connect.js';
 import { errorHandler } from './middleware/errorMiddleware.js';
 import { notFound } from './middleware/not-found.js';
-
-const app = express();
+import { app, server } from './socket/socket.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -25,7 +24,7 @@ app.use('/api/users', userRoutes)
 app.use(notFound)
 app.use(errorHandler)
 
-app.listen(PORT, async () => {
+server.listen(PORT, async () => {
     await connectDB();
     console.log(`Server started on http://localhost:${PORT}`);
 });
