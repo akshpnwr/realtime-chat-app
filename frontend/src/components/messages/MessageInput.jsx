@@ -3,12 +3,11 @@ import { BsSend } from "react-icons/bs";
 import useSendMessage from "../../hooks/useSendMessage";
 
 const MessageInput = () => {
-  const [input, setInput] = useState();
+  const [input, setInput] = useState("");
   const { loading, sendMessage } = useSendMessage();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(input);
     sendMessage(input);
     setInput("");
   };
