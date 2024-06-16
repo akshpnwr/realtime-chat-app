@@ -19,7 +19,7 @@ export const SocketContextProvider = ({ children }) => {
   useEffect(() => {
     if (authUser) {
       // Connect to the socket server
-      const socket = io("http://localhost:5000", {
+      const socket = io("https://chat-application-sm9b.onrender.com", {
         query: { userId: authUser._id },
       }); // Replace with your server URL
 

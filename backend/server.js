@@ -27,9 +27,7 @@ app.use('/api/users', userRoutes)
 
 app.use(express.static(path.join(__dirname, '/frontend/dist')))
 
-console.log(path.join(__dirname, '/frontend/dist/index.html'));
 app.get("*", (req, res) => {
-    console.log('here');
     res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
 
