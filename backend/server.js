@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser';
+import path from 'path'
 
 import authRoutes from './router/auth.routes.js'
 import messageRoutes from './router/message.routes.js'
@@ -13,6 +14,7 @@ import { app, server } from './socket/socket.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
+const __dirname = path.resolve();
 
 app.use(express.json())
 app.use(cookieParser())
@@ -20,6 +22,16 @@ app.use(cookieParser())
 app.use('/api/auth', authRoutes);
 app.use('/api/message', messageRoutes);
 app.use('/api/users', userRoutes)
+
+
+
+app.use(express.static(path.join(__dirname, '/frontend/dist')))
+
+console.log(path.join(__dirname, '/frontend/dist/index.html'));
+app.get("*", (req, res) => {
+    console.log('here');
+    res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
 
 app.use(notFound)
 app.use(errorHandler)
