@@ -1,11 +1,23 @@
+import { useState } from "react";
 import { useSocketContext } from "../../context/SocketContext";
 import useConversation from "../../zustand/useConversation";
 
-const Conversation = ({ conversation, lastIdx, emoji }) => {
+const Conversation = ({ conversation, lastIdx, emoji, type }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const isSelected = selectedConversation?._id === conversation._id;
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(conversation._id);
+  const { groupParticipants, setGroupParticipants } = useConversation();
+
+  const handleCheckBox = (e) => {
+    if (e.target.checked) {
+      setGroupParticipants([...groupParticipants, conversation._id]);
+    } else {
+      setGroupParticipants(
+        groupParticipants.filter((id) => id !== conversation._id)
+      );
+    }
+  };
 
   return (
     <>
@@ -15,12 +27,18 @@ const Conversation = ({ conversation, lastIdx, emoji }) => {
         }`}
         onClick={() => setSelectedConversation(conversation)}
       >
+        {type === "group" && (
+          <input
+            type="checkbox"
+            className="checkbox checkbox-warning"
+            onChange={handleCheckBox}
+          />
+        )}
         <div className={`avatar ${isOnline ? "online" : ""}`}>
           <div className="w-12 rounded-full">
             <img src={conversation.profilePic} alt="user avatar" />
           </div>
         </div>
-
         <div className="flex flex-col flex-1">
           <div className="flex gap-3 justify-between">
             <p className="font-bold text-gray-200">{conversation.fullname}</p>

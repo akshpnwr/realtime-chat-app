@@ -1,8 +1,9 @@
+import React from "react";
 import useGetConversation from "../../hooks/useGetConversations";
 import { getRandomEmoji } from "../../utils/emojis";
 import Conversation from "./Conversation";
 
-const Conversations = () => {
+const Conversations = ({ type }) => {
   const { loading, conversations } = useGetConversation();
   console.log(conversations);
   return (
@@ -12,8 +13,8 @@ const Conversations = () => {
           key={conversation._id}
           conversation={conversation}
           emoji={getRandomEmoji()}
-          {...conversation}
           lastIdx={idx === conversations.length - 1}
+          type={type}
         />
       ))}
       {loading ? (
@@ -22,4 +23,4 @@ const Conversations = () => {
     </div>
   );
 };
-export default Conversations;
+export default React.memo(Conversations);
