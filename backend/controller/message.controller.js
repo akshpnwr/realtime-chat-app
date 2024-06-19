@@ -55,9 +55,31 @@ export const createGroup = async (req, res) => {
     res.status(StatusCodes.CREATED).json(newGroup);
 }
 
+export const getGroups = async (req, res) => {
+    const { _id: userId } = req.user;
+
+    const groups = await Group.find({ participants: userId });
+    res.json({ groups });
+}
+
 export const sendMessageToGroup = async (req, res) => {
     const { _id: groupId } = req.params;
-    const { _id: senderId } = req.user
+    const { _id: senderId } = req.user;
+    const { message } = req.body;
+
+    const group = await Group.findById({ _id: groupId })
+
+    const newMessage = new Message({
+        senderId,
+        receiverId: groupId,
+        message
+    })
+
+    if (newMessage) group.messages.push(newMessage._id);
+
+    await Promise.all([newMessage.save(), group.save()]);
+
+    res.status(StatusCodes.OK).json(newMessage);
 }
 
 export const getMessage = async (req, res) => {
@@ -74,5 +96,16 @@ export const getMessage = async (req, res) => {
     if (!conversation) return res.status(StatusCodes.OK).json([]);
 
     const messages = conversation.messages;
+    res.status(StatusCodes.OK).json(messages)
+}
+
+export const getGroupMessages = async (req, res) => {
+
+    const { _id: groupId } = req.params;
+    const group = await Group.findOne({ _id: groupId }).populate('messages')
+
+    if (!group) return res.status(StatusCodes.OK).json([]);
+
+    const messages = group.messages;
     res.status(StatusCodes.OK).json(messages)
 }

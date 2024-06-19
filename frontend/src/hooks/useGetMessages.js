@@ -4,13 +4,15 @@ import useConversation from '../zustand/useConversation';
 
 const useGetMessages = () => {
     const [loading, setLoading] = useState(false);
-    const { messages, setMessages, selectedConversation } = useConversation();
+    const { messages, setMessages, selectedConversation, isGroupChat } = useConversation();
 
     useEffect(() => {
         const getMessages = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`/api/message/${selectedConversation._id}`);
+                const uri = isGroupChat ? `/api/message/group/${selectedConversation._id}` : `/api/message/${selectedConversation._id}`
+
+                const res = await fetch(uri);
 
                 const data = await res.json()
                 if (data.error) throw new Error(data.error)

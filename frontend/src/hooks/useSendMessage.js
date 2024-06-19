@@ -4,13 +4,15 @@ import { useState } from 'react';
 
 const useSendMessage = () => {
     const [loading, setLoading] = useState(false);
-    const { messages, setMessages, selectedConversation } = useConversation();
+    const { messages, setMessages, selectedConversation, isGroupChat } = useConversation();
 
     const sendMessage = async (message) => {
         setLoading(true)
         try {
             if (message === "") throw new Error('Message cannot be empty')
-            const res = await fetch(`api/message/send/${selectedConversation._id}`, {
+
+            const uri = isGroupChat ? `api/message/sendToGroup/${selectedConversation._id}` : `api/message/send/${selectedConversation._id}`
+            const res = await fetch(uri, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

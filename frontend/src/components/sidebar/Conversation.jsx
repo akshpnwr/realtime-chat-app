@@ -1,9 +1,9 @@
-import { useState } from "react";
 import { useSocketContext } from "../../context/SocketContext";
 import useConversation from "../../zustand/useConversation";
 
 const Conversation = ({ conversation, lastIdx, emoji, type }) => {
-  const { selectedConversation, setSelectedConversation } = useConversation();
+  const { selectedConversation, setSelectedConversation, setIsGroupChat } =
+    useConversation();
   const isSelected = selectedConversation?._id === conversation._id;
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(conversation._id);
@@ -25,7 +25,10 @@ const Conversation = ({ conversation, lastIdx, emoji, type }) => {
         className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer ${
           isSelected ? "bg-blue-400" : ""
         }`}
-        onClick={() => setSelectedConversation(conversation)}
+        onClick={() => {
+          setIsGroupChat(false);
+          setSelectedConversation(conversation);
+        }}
       >
         {type === "group" && (
           <input

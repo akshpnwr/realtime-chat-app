@@ -6,6 +6,7 @@ import SearchInput from "./SearchInput";
 import { useState } from "react";
 import { FaUserCheck } from "react-icons/fa";
 import useCreateGroup from "../../hooks/useCreateGroup";
+import Groups from "./Groups";
 
 const Sidebar = () => {
   const [isCreateGroupOpen, setIsCreateGroupOpen] = useState(false);
@@ -32,6 +33,7 @@ const Sidebar = () => {
               onChange={(e) => setGroupname(e.target.value)}
             />
           )}
+          <Groups type={isCreateGroupOpen ? "group" : "normal"} />
           <Conversations type={isCreateGroupOpen ? "group" : "normal"} />
           <div className="flex mt-auto justify-between">
             <LogoutButton />
