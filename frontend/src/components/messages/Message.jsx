@@ -3,11 +3,17 @@ import useConversation from "../../zustand/useConversation";
 
 const Message = ({ message, senderId, shouldShake }) => {
   const { authUser } = useAuthContext();
-  const { selectedConversation } = useConversation();
+  const { selectedConversation, isGroupChat, users } = useConversation();
   const fromMe = authUser._id === senderId;
-  const profilePic = fromMe
-    ? authUser.profilePic
-    : selectedConversation?.profilePic;
+
+  let profilePic = "";
+  if (isGroupChat && !fromMe) {
+    profilePic = users.find((user) => user._id === senderId).profilePic;
+  } else {
+    profilePic = fromMe
+      ? authUser.profilePic
+      : selectedConversation?.profilePic;
+  }
 
   return (
     <div

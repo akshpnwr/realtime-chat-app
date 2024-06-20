@@ -38,8 +38,8 @@ const Group = ({ group, lastIdx, emoji, type }) => {
             // onChange={handleCheckBox}
           />
         )}
-        <div className={`avatar`}>
-          <div className="w-12 rounded-full">
+        <div>
+          <div className="flex justify-center w-12 rounded-full">
             {/* <img src={conversation.profilePic} alt="user avatar" /> */}
             <FaUserGroup className="w-10 h-10" />
           </div>

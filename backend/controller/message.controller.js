@@ -79,6 +79,15 @@ export const sendMessageToGroup = async (req, res) => {
 
     await Promise.all([newMessage.save(), group.save()]);
 
+    const participants = group.participants;
+    participants.forEach(async (participant) => {
+        const receiverSocketId = getReceiverSocketId(participant);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit('newMessage', newMessage);
+        }
+    })
+    if (!newMessage) throw new Error('Message not sent');
+
     res.status(StatusCodes.OK).json(newMessage);
 }
 

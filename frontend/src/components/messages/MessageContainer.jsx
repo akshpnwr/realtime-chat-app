@@ -6,12 +6,21 @@ import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
 
 const MessageContainer = () => {
-  const { selectedConversation, setSelectedConversation } = useConversation();
+  const { selectedConversation, setSelectedConversation, users, isGroupChat } =
+    useConversation();
 
   useEffect(() => {
     // cleanup function (unmounts)
     return () => setSelectedConversation(null);
   }, [setSelectedConversation]);
+
+  let groupMemberNames = [];
+  if (isGroupChat) {
+    const filteredUsers = users.filter((user) =>
+      selectedConversation?.participants.includes(user._id)
+    );
+    groupMemberNames = filteredUsers.map((user) => user.fullname);
+  }
 
   return (
     <div className="md:min-w-[450px] flex flex-col">
@@ -20,12 +29,22 @@ const MessageContainer = () => {
       ) : (
         <>
           {/* Header */}
-          <div className="bg-slate-500 px-4 py-2 mb-2">
+          <div
+            className={`bg-slate-500 px-4 py-2 ${isGroupChat ? "" : "mb-1"}`}
+          >
             <span className="label-text">To:</span>{" "}
             <span className="text-gray-900 font-bold">
               {selectedConversation.fullname || selectedConversation.name}
             </span>
           </div>
+          {isGroupChat && (
+            <div className="bg-slate-500 px-4 py-2 border-t border-white-">
+              <span className="label-text">Members:</span>{" "}
+              <span className="text-gray-900 font-bold">
+                {groupMemberNames?.join(", ")}
+              </span>
+            </div>
+          )}
           <Messages />
           <MessageInput />
         </>

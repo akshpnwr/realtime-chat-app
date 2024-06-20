@@ -8,3 +8,15 @@ export const getUsersForSidebar = async (req, res) => {
 
     res.status(StatusCodes.OK).json(filteredUsers);
 }
+
+export const getUser = async (req, res) => {
+    const { _id: userId } = req.params;
+
+    const user = await User.findById(userId).select('-password');
+
+    if (!user) {
+        res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' });
+    }
+
+    res.status(StatusCodes.OK).json(user);
+}
