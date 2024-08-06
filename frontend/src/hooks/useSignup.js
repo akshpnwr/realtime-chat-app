@@ -19,9 +19,9 @@ const useSignup = () => {
                 body: JSON.stringify({ fullname, username, password, confirmPassword, gender })
             })
 
-            const data = await res.json();
+            if (!res.ok) throw new Error('Username already exists')
 
-            if (data.error) throw new Error(data.error)
+            const data = await res.json();
 
             localStorage.setItem('chat-user', JSON.stringify(data))
             setAuthUser(data)
